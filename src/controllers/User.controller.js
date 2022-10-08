@@ -5,7 +5,7 @@ const UserController = {
   createUser(req, res, next) {
     const { username } = req.body;
     if (!username)
-      next(
+      return next(
         new CustomError(CustomError.BadRequest, "You must provide username")
       );
     const user = UserService.createUser(username);

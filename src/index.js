@@ -17,8 +17,12 @@ app.post("/user", UserController.createUser);
 app.post("/category", CategoryController.createCategory);
 app.get("/categories", CategoryController.getCategories);
 app.post("/record", RecordController.addRecord);
-app.get("/records", RecordController.getRecords);
+app.get("/user_records/:user_id", RecordController.getUserRecords);
+app.get(
+  "/user_records/:user_id/:category_id",
+  RecordController.getUserCategoryRecords
+);
 
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   res.status(err.code).send(err);
 });

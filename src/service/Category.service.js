@@ -1,3 +1,4 @@
+const CustomError = require("../CustomError");
 const CategoryService = {
   categories: [],
 
@@ -12,6 +13,16 @@ const CategoryService = {
 
   getCategories() {
     return this.categories;
+  },
+
+  checkCategory(category_id) {
+    const category = this.categories.find((cat) => cat.id === category_id);
+    if (!category) {
+      throw new CustomError(
+        CustomError.NotFound,
+        "No category with such id was found"
+      );
+    }
   },
 };
 

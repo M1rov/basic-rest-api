@@ -5,7 +5,7 @@ const CategoryController = {
   createCategory(req, res, next) {
     const { name } = req.body;
     if (!name)
-      next(
+      return next(
         new CustomError(
           CustomError.BadRequest,
           'You must provide "name" for the category'
@@ -15,9 +15,8 @@ const CategoryController = {
     res.json(category);
   },
 
-  getCategories(req, res, next) {
-    const categories = CategoryService.getCategories();
-    res.json(categories);
+  getCategories(req, res) {
+    res.json(CategoryService.getCategories());
   },
 };
 

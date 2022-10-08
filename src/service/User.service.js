@@ -1,3 +1,4 @@
+const CustomError = require("../CustomError");
 const UserService = {
   users: [],
 
@@ -6,6 +7,16 @@ const UserService = {
     const user = { id, username };
     this.users.push(user);
     return user;
+  },
+
+  checkUser(user_id) {
+    const user = this.users.find((user) => user.id === user_id);
+    if (!user) {
+      throw new CustomError(
+        CustomError.NotFound,
+        "No user with such id was found"
+      );
+    }
   },
 };
 

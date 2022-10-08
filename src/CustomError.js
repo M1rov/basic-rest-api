@@ -1,5 +1,6 @@
 class CustomError {
   static BadRequest = 400;
+  static NotFound = 404;
   static ServerError = 500;
 
   constructor(type, message) {
