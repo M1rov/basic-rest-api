@@ -9,8 +9,8 @@ app.use(express.json());
 
 const PORT = 4000;
 
-app.listen(PORT, () => {
-  console.log(`SERVER STARTED ON PORT ${PORT}`);
+app.listen(process.env.PORT || PORT, () => {
+  console.log(`SERVER STARTED ON PORT ${process.env.PORT || PORT}`);
 });
 
 app.post("/user", UserController.createUser);
