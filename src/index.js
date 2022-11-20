@@ -13,6 +13,8 @@ app.listen(process.env.PORT || PORT, () => {
   database.connect();
 });
 
+app.get('/', (req, res) => res.json('Server Works!'));
+
 app.use('/api', router);
 
 app.use(function (err, req, res, next) {
