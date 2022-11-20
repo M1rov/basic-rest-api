@@ -1,38 +1,60 @@
-const RecordService = require("../service/Record.service");
-const CustomError = require("../CustomError");
+const RecordService = require('../service/Record.service');
+const CustomError = require('../CustomError');
 
 const RecordController = {
-  addRecord(req, res, next) {
-    const { user_id, category_id, date, sum } = req.body;
-    if (!(user_id && category_id && date && sum)) {
-      return next(
-        new CustomError(CustomError.BadRequest, "Wrong parameters provided")
+  async addRecord(req, res, next) {
+    try {
+      const { user_id, category_id, date, sum } = req.body;
+      if (!(user_id && category_id && date && sum)) {
+        return next(
+          new CustomError(CustomError.BadRequest, 'Wrong parameters provided')
+        );
+      }
+      const record = await RecordService.addRecord(
+        user_id,
+        category_id,
+        date,
+        sum
       );
+      res.json(record);
+    } catch (err) {
+      next(err);
     }
-    const record = RecordService.addRecord(user_id, category_id, date, sum);
-    res.json(record);
   },
 
-  getUserRecords(req, res, next) {
-    const { user_id } = req.params;
-    if (!user_id) {
-      return next(
-        new CustomError(CustomError.BadRequest),
-        'You must provide "user_id"'
-      );
+  async getUserRecords(req, res, next) {
+    try {
+      const { user_id } = req.params;
+      if (!user_id) {
+        return next(
+          new CustomError(CustomError.BadRequest),
+          'You must provide "user_id"'
+        );
+      }
+      const records = await RecordService.getUserRecords(+user_id);
+      res.json(records);
+    } catch (err) {
+      next(err);
     }
-    res.json(RecordService.getUserRecords(+user_id));
   },
 
-  getUserCategoryRecords(req, res, next) {
-    const { user_id, category_id } = req.params;
-    if (!(user_id && category_id)) {
-      return next(
-        new CustomError(CustomError.BadRequest),
-        'You must provide "user_id" and "category_id"'
+  async getUserCategoryRecords(req, res, next) {
+    try {
+      const { user_id, category_id } = req.params;
+      if (!(user_id && category_id)) {
+        return next(
+          new CustomError(CustomError.BadRequest),
+          'You must provide "user_id" and "category_id"'
+        );
+      }
+      const records = await RecordService.getUserCategoryRecords(
+        +user_id,
+        +category_id
       );
+      res.json(records);
+    } catch (err) {
+      next(err);
     }
-    res.json(RecordService.getUserCategoryRecords(+user_id, +category_id));
   },
 };
 

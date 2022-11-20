@@ -1,39 +1,28 @@
-const UserService = require("./User.service");
-const CustomError = require("../CustomError");
-const CategoryService = require("./Category.service");
+const CustomError = require('../CustomError');
+const Record = require('../db/models/Record.model');
+const User = require('../db/models/User.model');
 
 const RecordService = {
-  records: [],
-
-  addRecord(user_id, category_id, date, sum) {
-    UserService.checkUser(user_id);
-    CategoryService.checkCategory(category_id);
-    const id = this.records.length
-      ? this.records[this.records.length - 1].id + 1
-      : 1;
-    const record = { id, user_id, category_id, date, sum };
-    this.records.push(record);
-    return record;
+  async addRecord(user_id, category_id, date, sum) {
+    const record = { user_id, category_id, date: new Date(date), sum };
+    return Record.create(record);
   },
 
-  getUserRecords(user_id) {
-    const user = UserService.users.find((user) => user.id === user_id);
+  async getUserRecords(user_id) {
+    const user = await User.findOne({ where: { id: user_id } });
+
     if (!user) {
       throw new CustomError(
         CustomError.NotFound,
-        "No user with such id was found"
+        'No user with such id was found'
       );
     }
-    return this.records.filter((record) => record.user_id === user_id);
+
+    return Record.findAll({ where: { user_id } });
   },
 
   getUserCategoryRecords(user_id, category_id) {
-    UserService.checkUser(user_id);
-    CategoryService.checkCategory(category_id);
-    return this.records.filter(
-      (record) =>
-        record.user_id === user_id && record.category_id === category_id
-    );
+    return Record.findAll({ where: { user_id, category_id } });
   },
 };
 
