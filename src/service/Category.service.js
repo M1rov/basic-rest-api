@@ -1,27 +1,23 @@
-const CustomError = require("../CustomError");
+const Category = require('../db/models/Category.model');
+const CustomError = require('../CustomError');
+
 const CategoryService = {
   categories: [],
 
   createCategory(name) {
-    const id = this.categories.length
-      ? this.categories[this.categories.length - 1].id + 1
-      : 1;
-    const category = { id, name };
-    this.categories.push(category);
-    return category;
+    try {
+      const category = { name };
+      return Category.create(category);
+    } catch (err) {
+      throw new CustomError(CustomError.NotFound, err.message);
+    }
   },
 
-  getCategories() {
-    return this.categories;
-  },
-
-  checkCategory(category_id) {
-    const category = this.categories.find((cat) => cat.id === category_id);
-    if (!category) {
-      throw new CustomError(
-        CustomError.NotFound,
-        "No category with such id was found"
-      );
+  async getCategories() {
+    try {
+      return await Category.findAll();
+    } catch (err) {
+      throw new CustomError(CustomError.NotFound, err.message);
     }
   },
 };

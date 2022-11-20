@@ -1,22 +1,31 @@
-const CategoryService = require("../service/Category.service");
-const CustomError = require("../CustomError");
+const CategoryService = require('../service/Category.service');
+const CustomError = require('../CustomError');
 
 const CategoryController = {
-  createCategory(req, res, next) {
-    const { name } = req.body;
-    if (!name)
-      return next(
-        new CustomError(
-          CustomError.BadRequest,
-          'You must provide "name" for the category'
-        )
-      );
-    const category = CategoryService.createCategory(name);
-    res.json(category);
+  async createCategory(req, res, next) {
+    try {
+      const { name } = req.body;
+      if (!name)
+        return next(
+          new CustomError(
+            CustomError.BadRequest,
+            'You must provide "name" for the category'
+          )
+        );
+      const category = await CategoryService.createCategory(name);
+      res.json(category);
+    } catch (err) {
+      next(err);
+    }
   },
 
-  getCategories(req, res) {
-    res.json(CategoryService.getCategories());
+  async getCategories(req, res, next) {
+    try {
+      const categories = await CategoryService.getCategories();
+      res.json(categories);
+    } catch (err) {
+      next(err);
+    }
   },
 };
 
