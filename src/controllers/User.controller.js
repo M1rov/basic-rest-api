@@ -15,6 +15,16 @@ const UserController = {
       next(err);
     }
   },
+
+  async grantUser(req, res, next) {
+    try {
+      const { amount } = req.body;
+      const { user_id } = req.params;
+      res.json(await UserService.grantUser(user_id, amount));
+    } catch (err) {
+      next(err);
+    }
+  },
 };
 
 module.exports = UserController;
