@@ -1,7 +1,5 @@
-const express = require("express");
-const UserController = require("./controllers/User.controller");
-const CategoryController = require("./controllers/Category.controller");
-const RecordController = require("./controllers/Record.controller");
+const express = require('express');
+const router = require('./router/index');
 
 const app = express();
 
@@ -13,16 +11,9 @@ app.listen(process.env.PORT || PORT, () => {
   console.log(`SERVER STARTED ON PORT ${process.env.PORT || PORT}`);
 });
 
-app.post("/user", UserController.createUser);
-app.post("/category", CategoryController.createCategory);
-app.get("/categories", CategoryController.getCategories);
-app.post("/record", RecordController.addRecord);
-app.get("/user_records/:user_id", RecordController.getUserRecords);
-app.get(
-  "/user_records/:user_id/:category_id",
-  RecordController.getUserCategoryRecords
-);
+app.use('/api', router);
 
-app.use(function (err, req, res) {
+app.use(function (err, req, res, next) {
+  console.error(err);
   res.status(err.code).send(err);
 });
