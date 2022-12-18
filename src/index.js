@@ -1,6 +1,8 @@
 const express = require('express');
 const router = require('./router/index');
 const database = require('./db/index');
+const ErrorMiddleware = require('./middlewares/Error.middleware');
+require('dotenv').config();
 
 const app = express();
 
@@ -17,7 +19,4 @@ app.get('/', (req, res) => res.json('Server Works!'));
 
 app.use('/api', router);
 
-app.use(function (err, req, res, next) {
-  console.error(err);
-  res.status(err.code).send(err);
-});
+app.use(ErrorMiddleware);

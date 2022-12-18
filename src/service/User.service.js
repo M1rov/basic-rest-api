@@ -7,7 +7,7 @@ const UserService = {
 
   async createUser(username) {
     try {
-      const user = { username };
+      const user = { username, password: '' };
       const createdUser = await User.create(user);
       await Wallet.create({ user_id: createdUser.id });
       return createdUser;
